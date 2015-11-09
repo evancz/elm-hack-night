@@ -5,7 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Http
-import Json.Decode as Json
+import Json.Decode as Json exposing ((:=))
 import Task
 
 
@@ -22,10 +22,10 @@ type alias Answer =
     }
 
 
-init : String -> (Model, Effects Action)
+init : (Model, Effects Action)
 init =
   ( Model "" []
-  , search topic
+  , Effects.none
   )
 
 
@@ -70,7 +70,7 @@ view address model =
 
 search : String -> Effects Action
 search query =
-  Http.get decodeAlbums (searchUrl query)
+  Http.get decodeAnswers (searchUrl query)
     |> Task.toMaybe
     |> Task.map RegisterAnswers
     |> Effects.task
@@ -88,6 +88,6 @@ decodeAnswers : Json.Decoder (List Answer)
 decodeAnswers =
   let
     albumName =
-      "name" := Json.string
+      Json.map Answer ("name" := Json.string)
   in
-    Json.map Answer (Json.at ["albums", "items"] (Json.list albumName))
+    (Json.at ["albums", "items"] (Json.list albumName))
