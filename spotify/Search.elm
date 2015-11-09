@@ -70,17 +70,17 @@ row =
 
 bootstrap =
   node "link"
-    [ href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+       [href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
     , rel "stylesheet"
     ]
-    []
+       []
 
 
 view : Signal.Address Action -> Model -> Html
 view address model =
   div
     [style [("margin", "20px 0")]]
-    [ bootstrap
+      [bootstrap
     , containerFluid
         [ inputForm address model
         , resultsList address model
@@ -93,8 +93,8 @@ inputForm address model =
     []
     [ input
         [ type' "text"
-        , placeholder "Search for an album..."
-        , value model.query
+                   ,placeholder "Search for an album..."
+                   ,value model.query
         , onChange address QueryChange
         ]
         []
@@ -113,9 +113,12 @@ resultsList address model =
 
 resultView : Answer -> Html
 resultView answer =
-  li
-    [class "list-group-item"]
-    [text answer.name]
+  div [class "panel panel-info"]
+      [div [class "panel-heading"]
+           [text "Album"]
+      ,div [class "panel-body"
+           ,style [("height", "10rem")]]
+           [text answer.name]]
 
 
 
