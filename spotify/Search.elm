@@ -12,22 +12,26 @@ import Task
 -- MODEL
 
 type alias Model =
-    { topic : String
-    , results :
+    { query : String
+    , answers : List Answer
     }
 
 
-
+type alias Answer =
+    { name : String
+    }
 
 
 init : String -> (Model, Effects Action)
-init topic =
-  ( Model topic "assets/waiting.gif"
+init =
+  ( Model "" []
   , search topic
   )
 
 
+
 -- UPDATE
+
 
 type Action
     = RequestMore
@@ -46,38 +50,16 @@ update action model =
       )
 
 
+
 -- VIEW
+
 
 (=>) = (,)
 
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  div [ style [ "width" => "200px" ] ]
-    [ h2 [headerStyle] [text model.topic]
-    , div [imgStyle model.gifUrl] []
-    , button [ onClick address RequestMore ] [ text "More Please!" ]
-    ]
-
-
-headerStyle : Attribute
-headerStyle =
-  style
-    [ "width" => "200px"
-    , "text-align" => "center"
-    ]
-
-
-imgStyle : String -> Attribute
-imgStyle url =
-  style
-    [ "display" => "inline-block"
-    , "width" => "200px"
-    , "height" => "200px"
-    , "background-position" => "center center"
-    , "background-size" => "cover"
-    , "background-image" => ("url('" ++ url ++ "')")
-    ]
+  div [] []
 
 
 
