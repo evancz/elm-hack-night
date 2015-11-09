@@ -95,17 +95,14 @@ view address model =
 
 
 inputForm address model =
-  Html.form
-    []
-    [ input
-        [ type' "text"
-        , placeholder "Search for an album..."
-        , value model.query
-        , onChange address QueryChange
-        , onEnter address Query
-        ]
-        []
+  input
+    [ type' "text"
+    , placeholder "Search for an album..."
+    , value model.query
+    , onChange address QueryChange
+    , onEnter address Query
     ]
+    []
 
 
 resultsList address model =
