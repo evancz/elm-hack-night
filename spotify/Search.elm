@@ -120,9 +120,16 @@ resultsList address model =
 
 resultView : Answer -> Html
 resultView answer =
-  li
-    [class "list-group-item"]
-    [text answer.name]
+  div [class "panel panel-info"]
+      [ div
+          [class "panel-heading"]
+          [text "Album"]
+      , div
+          [ class "panel-body"
+          , style [("height", "10rem")]
+          ]
+          [text answer.name]
+      ]
 
 
 
