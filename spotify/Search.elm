@@ -2,12 +2,13 @@ module Search where
 
 import Effects exposing (Effects, Never)
 import Html exposing (..)
-import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
+import Events exposing (onChange)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 import Http
 import Json.Decode as Json exposing ((:=))
 import Task
-
+import Signal exposing (message,forwardTo,Address)
 
 -- MODEL
 
@@ -55,17 +56,45 @@ update action model =
 
 -- VIEW
 
+containerFluid = div [class "container-fluid"]
+row = div [class "row"]
 
-(=>) = (,)
-
+bootstrap =
+  node "link"
+       [href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+       ,rel "stylesheet"]
+       []
 
 view : Signal.Address Action -> Model -> Html
 view address model =
-  div [] []
+  div [style [("margin", "20px 0")]]
+      [bootstrap
+      ,containerFluid [inputForm address model
+                      ,resultsList address model]]
 
+inputForm address model =
+  Html.form []
+            [input [type' "text"
+                   ,placeholder "Search for an album..."
+                   ,value model.query
+                   ,onChange address QueryChange]
+                   []]
+
+resultsList address model =
+  row (List.map (\answer -> div [class "col-xs-2 col-md-3"]
+                                [resultView answer])
+                model.answers)
+
+resultView : Answer -> Html
+resultView answer =
+  li [class "list-group-item"]
+     [text answer.name]
 
 
 -- EFFECTS
+
+
+(=>) = (,)
 
 
 search : String -> Effects Action
