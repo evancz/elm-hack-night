@@ -34,18 +34,20 @@ init =
 
 
 type Action
-    = RequestMore
-    | NewGif (Maybe String)
+    = QueryChange String
+    | RegisterAnswers (Maybe (List Answer))
 
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    RequestMore ->
-      (model, search model.topic)
+    QueryChange newQuery ->
+      ( Model newQuery model.answers
+      , search newQuery
+      )
 
-    NewGif maybeUrl ->
-      ( Model model.topic (Maybe.withDefault model.gifUrl maybeUrl)
+    RegisterAnswers maybeAnswers ->
+      ( Model model.query (Maybe.withDefault [] maybeAnswers)
       , Effects.none
       )
 
@@ -70,7 +72,7 @@ search : String -> Effects Action
 search query =
   Http.get decodeAlbums (searchUrl query)
     |> Task.toMaybe
-    |> Task.map SearchResults
+    |> Task.map RegisterAnswers
     |> Effects.task
 
 
@@ -82,10 +84,10 @@ searchUrl query =
     ]
 
 
-decodeAlbums : Json.Decoder (List String)
-decodeAlbums =
+decodeAnswers : Json.Decoder (List Answer)
+decodeAnswers =
   let
     albumName =
       "name" := Json.string
   in
-    Json.at ["albums", "items"] (Json.list albumName)
+    Json.map Answer (Json.at ["albums", "items"] (Json.list albumName))
