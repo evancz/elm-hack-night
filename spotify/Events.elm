@@ -9,7 +9,7 @@ module Events
 
 import Html exposing (Attribute)
 import Html.Events exposing (..)
-import Json.Decode exposing (customDecoder)
+import Json.Decode as Json
 import Signal exposing (..)
 
 

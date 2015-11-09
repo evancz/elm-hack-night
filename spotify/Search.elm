@@ -39,6 +39,7 @@ init =
 
 type Action
     = QueryChange String
+    | Query
     | RegisterAnswers (Maybe (List Answer))
 
 
@@ -47,7 +48,12 @@ update action model =
   case action of
     QueryChange newQuery ->
       ( Model newQuery model.answers
-      , search newQuery
+      , Effects.none
+      )
+
+    Query ->
+      ( model
+      , search model.query
       )
 
     RegisterAnswers maybeAnswers ->
@@ -96,6 +102,7 @@ inputForm address model =
         , placeholder "Search for an album..."
         , value model.query
         , onChange address QueryChange
+        , onEnter address Query
         ]
         []
     ]
