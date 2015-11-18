@@ -2,7 +2,7 @@ module Search where
 
 import Effects exposing (Effects, Never)
 import Html exposing (..)
-import Events exposing (onChange, onEnter)
+import Events exposing (onInput, onEnter)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Http
@@ -99,7 +99,7 @@ inputForm address model =
     [ type' "text"
     , placeholder "Search for an album..."
     , value model.query
-    , onChange address QueryChange
+    , onInput address QueryChange
     , onEnter address Query
     ]
     []

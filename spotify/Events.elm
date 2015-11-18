@@ -1,5 +1,5 @@
 module Events
-  (onChange, onEnter)
+  (onInput, onEnter)
   where
 
 {-| Extensions to the Html.Events library.
@@ -25,6 +25,6 @@ is13 code =
   if code == 13 then Ok () else Err "not the right key code"
 
 
-onChange : Address a -> (String -> a) -> Html.Attribute
-onChange address f =
-  on "change" targetValue (message (forwardTo address f))
+onInput : Address a -> (String -> a) -> Html.Attribute
+onInput address f =
+  on "input" targetValue (message (forwardTo address f))
