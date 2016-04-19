@@ -1,15 +1,17 @@
+module Main (..) where
 
 import Effects exposing (Never)
-import Search
 import StartApp
-import Task
+import State
+import Task exposing (Task)
+import View
 
 
 app =
   StartApp.start
-    { init = Search.init
-    , update = Search.update
-    , view = Search.view
+    { init = State.init
+    , update = State.update
+    , view = View.root
     , inputs = []
     }
 
@@ -18,8 +20,6 @@ main =
   app.html
 
 
-port tasks : Signal (Task.Task Never ())
+port tasks : Signal (Task Never ())
 port tasks =
   app.tasks
-
-
