@@ -6,7 +6,7 @@
 $ elm package install --yes
 $ elm reactor
 
-Then open http://localhost:8000/Main.elm.
+Then open http://localhost:8000/src/Main.elm.
 ```
 
 ## Challenges
@@ -22,7 +22,7 @@ them.
 
 ### Clean Up The Compiler Warnings (Medium)
 
-If you compile the app with `elm make Main.elm --warn`, you'll see
+If you compile the app with `elm make src/Main.elm --warn`, you'll see
 we've got some work to do. Going through that list will teach you a
 lot about how Elm's types work, and hence how the app is structured.
 
