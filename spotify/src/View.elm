@@ -3,6 +3,7 @@ module View exposing (root)
 import Album.Types as Album
 import Album.View as Album
 import Array exposing (Array)
+import Dialog
 import Events exposing (onEnter)
 import Html exposing (..)
 import Html.App as Html
@@ -28,6 +29,12 @@ root model =
                 Just (Ok albums) ->
                     albumsList albums
             ]
+        , case model.results of
+            Just (Ok albums) ->
+                Dialog.view (showDialog albums)
+
+            _ ->
+                span [] []
         ]
 
 
@@ -53,6 +60,21 @@ albumsList albums =
                 ]
     in
         row
-            (Array.toList albums
-                |> List.indexedMap toTile
+            (albums
+                |> Array.indexedMap toTile
+                |> Array.toList
             )
+
+
+showDialog : Array Album.Model -> Maybe (Dialog.Config Msg)
+showDialog albums =
+    let
+        albumDialog : Int -> Album.Model -> Maybe (Dialog.Config Msg)
+        albumDialog index album =
+            Album.showDialog album
+                |> Dialog.mapMaybe (AlbumMsg index)
+    in
+        albums
+            |> Array.indexedMap albumDialog
+            |> Array.toList
+            |> Maybe.oneOf

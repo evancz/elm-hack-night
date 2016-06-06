@@ -9,8 +9,9 @@ type alias Model =
     { id : String
     , name : String
     , images : List Image
+    , showDetails : Bool
     }
 
 
 type Msg
-    = NoOp
+    = ToggleDetails
