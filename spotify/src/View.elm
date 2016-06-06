@@ -50,22 +50,14 @@ albumsList albums =
 
 albumView : Album -> Html msg
 albumView album =
-    div [ class "panel panel-info" ]
-        [ div [ class "panel-heading" ]
-            [ text album.name ]
-        , div
-            [ class "panel-body"
-            , style [ ( "height", "300px" ) ]
-            ]
+    panel [ text album.name ]
+        [ div [ style [ ( "height", "300px" ) ] ]
             [ case List.head album.images of
                 Nothing ->
                     span [] [ text "" ]
 
                 Just image ->
-                    img
-                        [ class "img-responsive"
-                        , src image
-                        ]
+                    img [ class "img-responsive", src image ]
                         []
             ]
         ]
@@ -92,3 +84,11 @@ bootstrap =
         , rel "stylesheet"
         ]
         []
+
+
+panel : List (Html msg) -> List (Html msg) -> Html msg
+panel head body =
+    div [ class "panel panel-info" ]
+        [ div [ class "panel-heading" ] head
+        , div [ class "panel-body" ] body
+        ]
