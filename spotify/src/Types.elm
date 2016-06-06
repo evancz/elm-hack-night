@@ -4,7 +4,8 @@ import Http exposing (Error)
 
 
 type alias Album =
-    { name : String
+    { id : String
+    , name : String
     , images : List Image
     }
 

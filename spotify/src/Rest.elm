@@ -20,12 +20,15 @@ searchUrl query =
     Http.url "https://api.spotify.com/v1/search"
         [ ( "q", query )
         , ( "type", "album" )
+        , ( "market", "GB" )
+        , ( "limit", "50" )
         ]
 
 
 decodeAlbum : Decoder Album
 decodeAlbum =
     decode Album
+        |> required "id" string
         |> required "name" string
         |> required "images" (list decodeImage)
 

@@ -5,13 +5,14 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Types exposing (..)
+import View.Bootstrap exposing (..)
 
 
 root : Model -> Html Msg
 root model =
-    div [ style [ ( "margin", "20px 0" ) ] ]
+    div []
         [ bootstrap
-        , containerFluid
+        , container
             [ inputForm model
             , case model.results of
                 Nothing ->
@@ -51,7 +52,7 @@ albumsList albums =
 albumView : Album -> Html msg
 albumView album =
     panel [ text album.name ]
-        [ div [ style [ ( "height", "300px" ) ] ]
+        [ div []
             [ case List.head album.images of
                 Nothing ->
                     span [] [ text "" ]
@@ -60,35 +61,4 @@ albumView album =
                     img [ class "img-responsive", src image ]
                         []
             ]
-        ]
-
-
-
--- Bootstrap.
-
-
-containerFluid : List (Html a) -> Html a
-containerFluid =
-    div [ class "container-fluid" ]
-
-
-row : List (Html a) -> Html a
-row =
-    div [ class "row" ]
-
-
-bootstrap : Html a
-bootstrap =
-    node "link"
-        [ href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-        , rel "stylesheet"
-        ]
-        []
-
-
-panel : List (Html msg) -> List (Html msg) -> Html msg
-panel head body =
-    div [ class "panel panel-info" ]
-        [ div [ class "panel-heading" ] head
-        , div [ class "panel-body" ] body
         ]
