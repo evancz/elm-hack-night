@@ -1,4 +1,4 @@
-module Events (onInput, onEnter) where
+module Events exposing (onEnter)
 
 {-| Extensions to the Html.Events library.
 
@@ -7,26 +7,20 @@ module Events (onInput, onEnter) where
 
 import Html exposing (Attribute)
 import Html.Events exposing (..)
-import Json.Decode as Json
-import Signal exposing (..)
+import Json.Decode as Decode
 
 
-onEnter : Address a -> a -> Attribute
-onEnter address value =
-  on
-    "keydown"
-    (Json.customDecoder keyCode is13)
-    (\_ -> Signal.message address value)
+onEnter : msg -> Attribute msg
+onEnter msg =
+    on "keydown"
+        (Decode.customDecoder keyCode is13
+            |> Decode.map (always msg)
+        )
 
 
 is13 : Int -> Result String ()
 is13 code =
-  if code == 13 then
-    Ok ()
-  else
-    Err "not the right key code"
-
-
-onInput : Address a -> (String -> a) -> Html.Attribute
-onInput address f =
-  on "input" targetValue (message (forwardTo address f))
+    if code == 13 then
+        Ok ()
+    else
+        Err "not the right key code"

@@ -1,18 +1,20 @@
-module Types (..) where
+module Types exposing (..)
+
+import Http exposing (Error)
 
 
 type alias Answer =
-  { name : String
-  }
+    { name : String
+    }
 
 
 type alias Model =
-  { query : String
-  , answers : List Answer
-  }
+    { query : String
+    , results : Maybe (Result Error (List Answer))
+    }
 
 
-type Action
-  = QueryChange String
-  | Query
-  | RegisterAnswers (Maybe (List Answer))
+type Msg
+    = QueryChange String
+    | Query
+    | SpotifyResponse (Result Error (List Answer))

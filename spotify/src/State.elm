@@ -1,41 +1,32 @@
-module State (..) where
+module State exposing (..)
 
-import Effects exposing (Effects, Never)
-import Events exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Http
-import Json.Decode as Json exposing ((:=))
-import Signal exposing (message, forwardTo, Address)
-import Task
-import Types exposing (..)
 import Rest
+import Types exposing (..)
 
 
-init : ( Model, Effects Action )
+init : ( Model, Cmd Msg )
 init =
-  ( { query = ""
-    , answers = []
-    }
-  , Effects.none
-  )
+    ( { query = ""
+      , results = Nothing
+      }
+    , Cmd.none
+    )
 
 
-update : Action -> Model -> ( Model, Effects Action )
+update : Msg -> Model -> ( Model, Cmd Msg )
 update action model =
-  case action of
-    QueryChange newQuery ->
-      ( { model | query = newQuery }
-      , Effects.none
-      )
+    case action of
+        QueryChange newQuery ->
+            ( { model | query = newQuery }
+            , Cmd.none
+            )
 
-    Query ->
-      ( model
-      , Rest.search model.query
-      )
+        Query ->
+            ( model
+            , Rest.search model.query
+            )
 
-    RegisterAnswers maybeAnswers ->
-      ( { model | answers = (Maybe.withDefault [] maybeAnswers) }
-      , Effects.none
-      )
+        SpotifyResponse response ->
+            ( { model | results = Just response }
+            , Cmd.none
+            )

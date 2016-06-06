@@ -1,76 +1,84 @@
-module View (root) where
+module View exposing (root)
 
-import Events exposing (onInput, onEnter)
+import Events exposing (onEnter)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Signal exposing (message, forwardTo, Address)
+import Html.Events exposing (..)
 import Types exposing (..)
 
 
-root : Signal.Address Action -> Model -> Html
-root address model =
-  div
-    [ style [ ( "margin", "20px 0" ) ] ]
-    [ bootstrap
-    , containerFluid
-        [ inputForm address model
-        , resultsList address model
+root : Model -> Html Msg
+root model =
+    div [ style [ ( "margin", "20px 0" ) ] ]
+        [ bootstrap
+        , containerFluid
+            [ inputForm model
+            , case model.results of
+                Nothing ->
+                    p [] [ text "Type a query." ]
+
+                Just (Err err) ->
+                    div [ class "alert alert-danger" ] [ text (toString err) ]
+
+                Just (Ok results) ->
+                    resultsList results
+            ]
         ]
-    ]
 
 
-inputForm address model =
-  input
-    [ type' "text"
-    , placeholder "Search for an album..."
-    , value model.query
-    , onInput address QueryChange
-    , onEnter address Query
-    ]
-    []
+inputForm : Model -> Html Msg
+inputForm model =
+    input
+        [ type' "text"
+        , placeholder "Search for an album..."
+        , value model.query
+        , onInput QueryChange
+        , onEnter Query
+        ]
+        []
 
 
-resultsList address model =
-  let
-    toEntry answer =
-      div
-        [ class "col-xs-2 col-md-3" ]
-        [ resultView answer ]
-  in
-    row (List.map toEntry model.answers)
+resultsList : List Answer -> Html msg
+resultsList answers =
+    let
+        toEntry answer =
+            div [ class "col-xs-2 col-md-3" ]
+                [ resultView answer ]
+    in
+        row (List.map toEntry answers)
 
 
-resultView : Answer -> Html
+resultView : Answer -> Html msg
 resultView answer =
-  div
-    [ class "panel panel-info" ]
-    [ div
-        [ class "panel-heading" ]
-        [ text "Album" ]
-    , div
-        [ class "panel-body"
-        , style [ ( "height", "10rem" ) ]
+    div [ class "panel panel-info" ]
+        [ div [ class "panel-heading" ]
+            [ text "Album" ]
+        , div
+            [ class "panel-body"
+            , style [ ( "height", "10rem" ) ]
+            ]
+            [ text answer.name ]
         ]
-        [ text answer.name ]
-    ]
 
 
 
 -- Bootstrap.
 
 
+containerFluid : List (Html a) -> Html a
 containerFluid =
-  div [ class "container-fluid" ]
+    div [ class "container-fluid" ]
 
 
+row : List (Html a) -> Html a
 row =
-  div [ class "row" ]
+    div [ class "row" ]
 
 
+bootstrap : Html a
 bootstrap =
-  node
-    "link"
-    [ href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-    , rel "stylesheet"
-    ]
-    []
+    node "link"
+        [ href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+        , rel "stylesheet"
+        ]
+        []
