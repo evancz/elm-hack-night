@@ -9,7 +9,7 @@ init =
     ( { query = ""
       , results = Nothing
       }
-    , Cmd.none
+    , Rest.search "frank zappa"
     )
 
 

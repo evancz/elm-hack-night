@@ -1,7 +1,8 @@
 module Rest exposing (..)
 
 import Http exposing (Error)
-import Json.Decode as Decode exposing ((:=), Decoder)
+import Json.Decode exposing (..)
+import Json.Decode.Pipeline exposing (..)
 import Task
 import Types exposing (..)
 import Types exposing (..)
@@ -9,7 +10,7 @@ import Types exposing (..)
 
 search : String -> Cmd Msg
 search query =
-    Http.get decodeAnswers (searchUrl query)
+    Http.get decodeAlbums (searchUrl query)
         |> Task.perform Err Ok
         |> Cmd.map SpotifyResponse
 
@@ -22,10 +23,18 @@ searchUrl query =
         ]
 
 
-decodeAnswers : Decoder (List Answer)
-decodeAnswers =
-    let
-        albumName =
-            Decode.map Answer ("name" := Decode.string)
-    in
-        (Decode.at [ "albums", "items" ] (Decode.list albumName))
+decodeAlbum : Decoder Album
+decodeAlbum =
+    decode Album
+        |> required "name" string
+        |> required "images" (list decodeImage)
+
+
+decodeImage : Decoder Image
+decodeImage =
+    "url" := string
+
+
+decodeAlbums : Decoder (List Album)
+decodeAlbums =
+    at [ "albums", "items" ] (list decodeAlbum)

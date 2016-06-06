@@ -20,8 +20,8 @@ root model =
                 Just (Err err) ->
                     div [ class "alert alert-danger" ] [ text (toString err) ]
 
-                Just (Ok results) ->
-                    resultsList results
+                Just (Ok albums) ->
+                    albumsList albums
             ]
         ]
 
@@ -38,26 +38,36 @@ inputForm model =
         []
 
 
-resultsList : List Answer -> Html msg
-resultsList answers =
+albumsList : List Album -> Html msg
+albumsList albums =
     let
-        toEntry answer =
+        toTile album =
             div [ class "col-xs-2 col-md-3" ]
-                [ resultView answer ]
+                [ albumView album ]
     in
-        row (List.map toEntry answers)
+        row (List.map toTile albums)
 
 
-resultView : Answer -> Html msg
-resultView answer =
+albumView : Album -> Html msg
+albumView album =
     div [ class "panel panel-info" ]
         [ div [ class "panel-heading" ]
-            [ text "Album" ]
+            [ text album.name ]
         , div
             [ class "panel-body"
-            , style [ ( "height", "10rem" ) ]
+            , style [ ( "height", "300px" ) ]
             ]
-            [ text answer.name ]
+            [ case List.head album.images of
+                Nothing ->
+                    span [] [ text "" ]
+
+                Just image ->
+                    img
+                        [ class "img-responsive"
+                        , src image
+                        ]
+                        []
+            ]
         ]
 
 
