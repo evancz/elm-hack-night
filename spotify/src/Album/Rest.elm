@@ -11,7 +11,6 @@ decodeAlbum =
         |> required "id" string
         |> required "name" string
         |> required "images" (list decodeImage)
-        |> hardcoded 0
 
 
 decodeImage : Decoder Image

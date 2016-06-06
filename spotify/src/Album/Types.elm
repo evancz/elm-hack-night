@@ -9,9 +9,8 @@ type alias Model =
     { id : String
     , name : String
     , images : List Image
-    , clickCount : Int
     }
 
 
 type Msg
-    = Click
+    = NoOp
