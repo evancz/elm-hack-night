@@ -1,10 +1,11 @@
 module Rest exposing (..)
 
+import Album.Rest as Album
+import Album.Types as Album
+import Array exposing (Array)
 import Http exposing (Error)
 import Json.Decode exposing (..)
-import Json.Decode.Pipeline exposing (..)
 import Task
-import Types exposing (..)
 import Types exposing (..)
 
 
@@ -25,19 +26,6 @@ searchUrl query =
         ]
 
 
-decodeAlbum : Decoder Album
-decodeAlbum =
-    decode Album
-        |> required "id" string
-        |> required "name" string
-        |> required "images" (list decodeImage)
-
-
-decodeImage : Decoder Image
-decodeImage =
-    "url" := string
-
-
-decodeAlbums : Decoder (List Album)
+decodeAlbums : Decoder (Array Album.Model)
 decodeAlbums =
-    at [ "albums", "items" ] (list decodeAlbum)
+    at [ "albums", "items" ] (array Album.decodeAlbum)

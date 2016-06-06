@@ -1,7 +1,11 @@
 module View exposing (root)
 
+import Album.Types as Album
+import Album.View as Album
+import Array exposing (Array)
 import Events exposing (onEnter)
 import Html exposing (..)
+import Html.App as Html
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Types exposing (..)
@@ -39,26 +43,16 @@ inputForm model =
         []
 
 
-albumsList : List Album -> Html msg
+albumsList : Array Album.Model -> Html Msg
 albumsList albums =
     let
-        toTile album =
+        toTile index album =
             div [ class "col-xs-2 col-md-3" ]
-                [ albumView album ]
+                [ Album.root album
+                    |> Html.map (AlbumMsg index)
+                ]
     in
-        row (List.map toTile albums)
-
-
-albumView : Album -> Html msg
-albumView album =
-    panel [ text album.name ]
-        [ div []
-            [ case List.head album.images of
-                Nothing ->
-                    span [] [ text "" ]
-
-                Just image ->
-                    img [ class "img-responsive", src image ]
-                        []
-            ]
-        ]
+        row
+            (Array.toList albums
+                |> List.indexedMap toTile
+            )
