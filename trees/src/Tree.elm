@@ -1,4 +1,4 @@
-module Tree where
+module Tree exposing (..)
 
 
 type Tree a
@@ -8,24 +8,15 @@ type Tree a
 
 empty : Tree a
 empty =
-  Empty
+    Empty
+
 
 
 -- singleton : a -> Tree a
-
-
 -- insert : comparable -> Tree comparable -> Tree comparable
-
-
 -- fromList : List comparable -> Tree comparable
-
-
 -- depth : Tree a -> Int
-
-
 -- map : (a -> b) -> Tree a -> Tree b
-
-
 {-----------------------------------------------------------------
 
 Exercises:

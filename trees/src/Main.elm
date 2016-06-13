@@ -1,3 +1,4 @@
+module Main exposing (..)
 
 import Html exposing (..)
 import Tree
@@ -8,6 +9,6 @@ myTree =
     Tree.empty
 
 
-main : Html
+main : Html msg
 main =
     TreeView.draw 800 myTree
