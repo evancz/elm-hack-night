@@ -111,7 +111,7 @@ fold func accumulator tree =
 {--CODE GOLF
 
 sum = fold (+) 0
-flatten = fold (++) []
+flatten = fold (::) []
 contains x = fold (\y b -> b || x == y) False
 contains x = fold (||) False << map ((==) x)
 
